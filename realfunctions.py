@@ -88,3 +88,5 @@ class ObjFunction:
 
         return None
 
+    # Ahora la cadena binaria es la resulta de concatenar todos los valores binarios del vector de numeros reales
+    # Cualquier numero desde el 9 al 15 en BCD lo tomaremos como 9
