@@ -1,86 +1,75 @@
+def bcd_to_real(cad):   #Convert the bit-string into the real number that represents (4 decimal digits)
+    #cad = cad.replace(' ', '')
+    if ((len(cad) - 1) % 4) != 0:
+        raise ValueError("Invalid decimal representation")
+
+    # Obtain the sing
+    sign = -1 if cad[0] == '1' else 1
+
+    # Obtain digits
+    digits = ""
+    for i in range(1, len(cad), 4):
+        num = int(cad[i:i + 4], 2)
+        if num > 9:
+            num = 9
+        digits += str(num)
+
+    # Separate decimals
+    intDigits = digits[0:-4]
+    decDigits = digits[-4:]
+
+    realNum = sign * (int(intDigits) + int(decDigits)/10000)
+
+    return realNum
+
+
+def bin_to_vector(cad, dimension=20):   #Converts the large bit-string into the vector of real values
+    #cad = cad.replace(' ', '')
+    length = len(cad)
+    size = length // dimension
+    vector = []
+
+    for i in range(0, length, size):
+        bcd = cad[i:i + size]
+        vector.append(bcd_to_real(bcd))
+
+    return vector
+
+
+def real_to_bcd(real, int_digits=1):  # Converts a real number into it's binary representation
+    bcd = '1' if real < 0 else '0'  # places the sign
+    num = int(abs(real * 10000))  # removes decimal digits
+
+    cad = str(num)
+    while len(cad) < (int_digits + 4): #Adjust the size of the bit string to the number of integer digits that should be represented at least
+        cad = '0' + cad
+
+    for d in cad:
+        aux = bin(int(d))[2:]
+        while len(aux) < 4:
+            aux = '0' + aux
+        bcd += aux
+
+    return bcd
+
+
+
+
+
+
+
 class ObjFunction:
 
     def f1(self, cad):
-        # F1: Counts the number of isolated "1" in the string
-        # Max: 25
-
-        cont = 0
-        prev = '0'
-        act = '0'
-
-        for next in cad:
-            if prev == '0' and act == '1' and next == '0':  # ...010...
-                cont = cont + 1
-
-            prev = act
-            act = next
-
-        # check the last one
-        if prev == '0' and act == '1':
-            cont = cont + 1
-
-        return cont
-
-    def f2(self, cad):
-        # F2: Number of "0" between "1":  10*1
-        # Max: 48
-
-        sum = 0
-        cont = 0
-        between = False
-
-        for c in cad:
-            if not between and c == '1':  # we've found the begining
-                between = True
-            elif between and c == '0':  # Count 0's (doesn't mean they're between 1's)
-                cont = cont + 1
-            elif between and c == '1':  # 0's were definetly between 1's
-                sum = sum + cont
-                cont = 0
-
-        return sum
-
-    def f3(self, cad):
-        # F3: Decimal value of the first half minus decimal value of the second half
-        # Max: 33.554.431
-
-        subStr1 = cad[0:25]
-        subStr2 = cad[25:50]
-
-        return int(subStr1, 2) - int(subStr2, 2)
-
-    def f4(self, cad):
-        # F4: Decimal value of the reverse bit string
-        # Max: 1125899906842623
-
-        rev = cad[::-1]
-
-        return int(rev, 2)
-
-    def f5(self, cad):
-        # F5: How far is the first "1" from the left (10 if there's no "1")
-        # Max: 50
-
-        found = False
-        i = 0
-        while i < len(cad) and not found:
-            c = cad[i]
-            if c == '1':
-                found = True
-            i = i + 1
-
-        if not found:
-            return i
-        else:
-            return i - 1
+        return 0
 
     def optimal_solution(self, function, size=50):
         if function == self.f1:
-            return int(size/2)
+            return int(size / 2)
         elif function == self.f2:
             return size - 2
         elif function == self.f3:
-            return pow(2, int(size/2)) - 1
+            return pow(2, int(size / 2)) - 1
         elif function == self.f4:
             return pow(2, size) - 1
         elif function == self.f5:
