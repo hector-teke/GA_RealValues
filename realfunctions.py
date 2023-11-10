@@ -1,5 +1,5 @@
-def bcd_to_real(cad):   #Convert the bit-string into the real number that represents (4 decimal digits)
-    #cad = cad.replace(' ', '')
+def bcd_to_real(cad):  # Convert the bit-string into the real number that represents (4 decimal digits)
+    # cad = cad.replace(' ', '')
     if ((len(cad) - 1) % 4) != 0:
         raise ValueError("Invalid decimal representation")
 
@@ -18,13 +18,13 @@ def bcd_to_real(cad):   #Convert the bit-string into the real number that repres
     intDigits = digits[0:-4]
     decDigits = digits[-4:]
 
-    realNum = sign * (int(intDigits) + int(decDigits)/10000)
+    realNum = sign * (int(intDigits) + int(decDigits) / 10000)
 
     return realNum
 
 
-def bin_to_vector(cad, dimension=20):   #Converts the large bit-string into the vector of real values
-    #cad = cad.replace(' ', '')
+def bin_to_vector(cad, dimension=20):  # Converts the large bit-string into the vector of real values
+    # cad = cad.replace(' ', '')
     length = len(cad)
     size = length // dimension
     vector = []
@@ -41,7 +41,8 @@ def real_to_bcd(real, int_digits=1):  # Converts a real number into it's binary 
     num = int(abs(real * 10000))  # removes decimal digits
 
     cad = str(num)
-    while len(cad) < (int_digits + 4): #Adjust the size of the bit string to the number of integer digits that should be represented at least
+    while len(cad) < (
+            int_digits + 4):  # Adjust the size of the bit string to the number of integer digits that should be represented at least
         cad = '0' + cad
 
     for d in cad:
@@ -53,15 +54,19 @@ def real_to_bcd(real, int_digits=1):  # Converts a real number into it's binary 
     return bcd
 
 
-
-
-
-
-
 class ObjFunction:
 
-    def f1(self, cad):
-        return 0
+    def sphere(self, cad):
+        if len(cad) != 210:
+            raise ValueError("Invalid input! 10 dimension problem was expected")
+
+        vector = bin_to_vector(cad, 10)
+        sum = 0
+
+        for e in vector:
+            sum += pow(e, 2)
+
+        return sum
 
     def optimal_solution(self, function, size=50):
         if function == self.f1:
