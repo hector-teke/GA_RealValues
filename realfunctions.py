@@ -1,3 +1,6 @@
+import math
+
+
 def bcd_to_real(cad):  # Convert the bit-string into the real number that represents (4 decimal digits)
     # cad = cad.replace(' ', '')
     if ((len(cad) - 1) % 4) != 0:
@@ -23,7 +26,7 @@ def bcd_to_real(cad):  # Convert the bit-string into the real number that repres
     return realNum
 
 
-def bin_to_vector(cad, dimension=20):  # Converts the large bit-string into the vector of real values
+def bin_to_vector(cad, dimension=10):  # Converts the large bit-string into the vector of real values
     # cad = cad.replace(' ', '')
     length = len(cad)
     size = length // dimension
@@ -64,21 +67,33 @@ class ObjFunction:
         sum = 0
 
         for e in vector:
+
             sum += pow(e, 2)
 
-        return sum
+        return 1 / (1 + sum)  # Inverse. Cause we wanna found the minimum
+
+    def schwefel(self, cad):
+        if len(cad) != 290:
+            raise ValueError("Invalid input! 10 dimension problem was expected")
+
+        vector = bin_to_vector(cad, 10)
+
+        v1 = 4189.829   # Already multiplied for d=10
+        sum = 0
+
+        for e in vector:
+
+            sum += e * math.sin(pow(abs(e), 0.5))
+
+        result = v1 - sum
+
+        return 1 / (1 + result)  # Inverse. Cause we wanna found the minimum
 
     def optimal_solution(self, function, size=50):
-        if function == self.f1:
-            return int(size / 2)
-        elif function == self.f2:
-            return size - 2
-        elif function == self.f3:
-            return pow(2, int(size / 2)) - 1
-        elif function == self.f4:
-            return pow(2, size) - 1
-        elif function == self.f5:
-            return size
+        if function == self.sphere:
+            return 1
+        if function == self.schwefel:
+            return 1
 
         return None
 

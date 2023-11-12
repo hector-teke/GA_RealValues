@@ -1,6 +1,6 @@
 import random
 
-from functions import ObjFunction
+from realfunctions import ObjFunction, bin_to_vector
 
 
 # Generation of first generation of 50 solutions with their quality value
@@ -50,7 +50,7 @@ def roulette(solutions):
     pa2 = None
     total = sum(solutions.values())
 
-    rnum = random.randint(0, total)
+    rnum = random.uniform(0, total)
 
     i = 0
     for k in solutions.keys():
@@ -61,7 +61,7 @@ def roulette(solutions):
 
     while True:     # Avoid the problem of choosing the same parents
 
-        rnum = random.randint(0, total)
+        rnum = random.uniform(0, total)
 
         i = 0
         for k in solutions.keys():
@@ -147,7 +147,7 @@ def genetic_algorithm(function, optimal, generations=1000, length=50, population
         # Store the best solution from current generation
         key, value = best
         best_solutions.append(value)
-        if value == optimal:       # If the best-found solution is optimal the execution ends
+        if value >= optimal:       # If the best-found solution is optimal the execution ends
             return (key, value), best_solutions
 
     return best_found(solutions), best_solutions
@@ -160,9 +160,15 @@ def genetic_algorithm(function, optimal, generations=1000, length=50, population
 if __name__ == '__main__':
 
     f = ObjFunction()
-    function = f.f1
+    function = f.schwefel
 
-    best, history = genetic_algorithm(function, f.optimal_solution(function, 50))
+    # length = 210 / 290 /
+    best, history = genetic_algorithm(function, f.optimal_solution(function), 1000, 290, 20, 2)
     # History keeps the best solution from every generation
     print(best)
-    print(len(history))
+    cad, quality = best
+    print(bin_to_vector(cad))
+    print("Ejecuciones: ", len(history))
+
+
+
