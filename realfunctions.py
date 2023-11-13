@@ -1,4 +1,5 @@
 import math
+import random
 
 
 def bcd_to_real(cad):  # Convert the bit-string into the real number that represents (4 decimal digits)
@@ -68,10 +69,8 @@ class ObjFunction:
         cad = ""
 
         for e in vector:
-            if e < -5.12:
-                e = -5.12
-            elif e > 5.12:
-                e = 5.12
+            if e < -5.12 or e > 5.12:   # If the value is out of the boundaries: random one is generated
+                e = random.uniform(-5.12, 5.12)
 
             cad += real_to_bcd(e, 1)
             sum += pow(e, 2)
@@ -89,10 +88,8 @@ class ObjFunction:
         cad = ""
 
         for e in vector:
-            if e < -500:
-                e = -500
-            elif e > 500:
-                e = 500
+            if e < -500 or e > 500:
+                e = random.uniform(-500, 500)
 
             cad += real_to_bcd(e, 3)
 
