@@ -65,12 +65,18 @@ class ObjFunction:
 
         vector = bin_to_vector(cad, 10)
         sum = 0
+        cad = ""
 
         for e in vector:
+            if e < -5.12:
+                e = -5.12
+            elif e > 5.12:
+                e = 5.12
 
+            cad += real_to_bcd(e, 1)
             sum += pow(e, 2)
 
-        return 1 / (1 + sum)  # Inverse. Cause we wanna found the minimum
+        return 1 / (1 + sum), cad  # Inverse. Cause we wanna found the minimum
 
     def schwefel(self, cad):
         if len(cad) != 290:
@@ -80,14 +86,21 @@ class ObjFunction:
 
         v1 = 4189.829   # Already multiplied for d=10
         sum = 0
+        cad = ""
 
         for e in vector:
+            if e < -500:
+                e = -500
+            elif e > 500:
+                e = 500
+
+            cad += real_to_bcd(e, 3)
 
             sum += e * math.sin(pow(abs(e), 0.5))
 
         result = v1 - sum
 
-        return 1 / (1 + result)  # Inverse. Cause we wanna found the minimum
+        return 1 / (1 + result), cad  # Inverse. Cause we wanna found the minimum
 
     def optimal_solution(self, function, size=50):
         if function == self.sphere:
@@ -97,5 +110,4 @@ class ObjFunction:
 
         return None
 
-    # Ahora la cadena binaria es la resulta de concatenar todos los valores binarios del vector de numeros reales
-    # Cualquier numero desde el 9 al 15 en BCD lo tomaremos como 9
+
