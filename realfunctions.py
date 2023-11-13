@@ -99,10 +99,36 @@ class ObjFunction:
 
         return 1 / (1 + result), cad  # Inverse. Cause we wanna found the minimum
 
+
+    def rastrigin(self, cad):
+        if len(cad) != 210:
+            raise ValueError("Invalid input! 10 dimension problem was expected")
+
+        vector = bin_to_vector(cad, 10)
+
+        v1 = 100    # 10 * d
+        sum = 0
+        cad = ""
+
+        for e in vector:
+            if e < -5.12 or e > 5.12:   # If the value is out of the boundaries: random one is generated
+                e = random.uniform(-5.12, 5.12)
+
+            cad += real_to_bcd(e, 1)
+
+            sum += pow(e, 2) - 10 * math.cos(2 * math.pi * e)
+
+        result = v1 + sum
+
+        return 1 / (1 + result), cad  # Inverse. Cause we wanna found the minimum
+
+
     def optimal_solution(self, function, size=50):
         if function == self.sphere:
             return 1
         if function == self.schwefel:
+            return 1
+        if function == self.rastrigin:
             return 1
 
         return None

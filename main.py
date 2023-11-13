@@ -176,7 +176,7 @@ if __name__ == '__main__':
 
     function = f.schwefel
 
-    # length = 210 / 290 /
+    # length = 210 / 290 / 210
     best, history = genetic_algorithm(function, f.optimal_solution(function), 1000, 290, 20, 2)
     # History keeps the best solution from every generation
     print(best)
